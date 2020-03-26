@@ -3,13 +3,18 @@ import './MemoryCard.css';
 import image from './digitalcrafts-logo-white-y.png';
 
 class MemoryCard extends Component {
-    state = { isFlipped: false }
+    constructor(props) {
+        super(props)
+        this.state = { 
+            isFlipped: false 
+        }
+    }
 
     clickHandler = () => {
         this.setState( { isFlipped: !this.state.isFlipped });
     }
   render() {
-      const { isFlipped } = this.state;
+      const { isFlipped } = this.props;
 
       const memoryCardInnerClass = 
       "MemoryCardInner" + (isFlipped === true ? " flipped" : "")
@@ -22,7 +27,7 @@ class MemoryCard extends Component {
                     <img src= { image } alt="Digital Crafts logo" />
                 </div>
                 <div className="MemoryCardFront">
-                    ∆
+                    {this.props.symbol}
                 </div>
             </div>
         </div>

@@ -7,13 +7,14 @@ const generateDeck = () => {
   const deck = [];
     for (let i = 0; i < 16; i++) {
       deck.push({
-        symbol: symbols[i % 8],
+        symbol: symbols[i%8],
         isFlipped: false
       });
+    }
     shuffle(deck);
     return deck;
-    }
 }
+
 function shuffle(array) {
   const newArray = array.concat();
   newArray.sort(() => 0.5 - Math.random());
@@ -25,11 +26,19 @@ class App extends Component {
       deck: generateDeck(),
       pickedCards: [] 
     }
+    pickCard= (cardIndex) => {
+      if(this.state.deck[cardIndex].isFlipped) {
+        return;
+      }
+      const cardToFlip = {...this.state.deck[cardIndex].isFlipped};
+      const newPickedCards = this.state.pickedCards.concat(cardIndex);
+    }
   render() {
    const cardsJSX = this.state.deck.map((card, index) => {
-     return  <MemoryCard />;
+     return  <MemoryCard symbol={card.symbol} isFlipped={card.isFlipped} key={index}/>;
     }
    );
+   
 
   return (
     <div className="App">
