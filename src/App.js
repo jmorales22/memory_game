@@ -15,10 +15,15 @@ const generateDeck = () => {
     return deck;
 }
 
-function shuffle(array) {
-  const newArray = array.concat();
-  newArray.sort(() => 0.5 - Math.random());
-  return newArray;
+function shuffle(a) {
+  var j, x, i;
+  for (i = a.length - 1; i > 0; i--) {
+      j = Math.floor(Math.random() * (i + 1));
+      x = a[i];
+      a[i] = a[j];
+      a[j] = x;
+  }
+  return a;
 }
 
 class App extends Component {
@@ -42,38 +47,47 @@ class App extends Component {
       })
       
       let newPickedCards = this.state.pickedCards.concat(cardIndex);
-      if(newPickedCards.length === 2){
+      if (newPickedCards.length === 2) {
         const card1Index = newPickedCards[0];
         const card2Index = newPickedCards[1];
         const firstCard = newDeck[card1Index];
         const secondCard = newDeck[card2Index];
-
-        if(firstCard.symbol !== secondCard.symbol){
+  
+        if (firstCard.symbol !== secondCard.symbol) {
+          console.log("we don't have a match!");
           setTimeout(() => {
-            this.unflipCards(card1Index, card2Index);
-            }, 1000);
-          }
-          newPickedCards = [];
-        } 
-      
+            this.unFlipCards(card1Index, card2Index);
+          }, 1000);
+        }
+  
+        newPickedCards = [];
+      }
+  
       this.setState({
-        deck: newDeck, 
+        deck: newDeck,
         pickedCards: newPickedCards
       });
     };
+  
 
-    unflipCards = (card1Index, card2Index) => {
-      const newDeck = this.state.deck.map(card => {
-        return { ...card };
+    unFlipCards = (card1Index, card2Index) => {
+      const { deck } = this.state;
+      const card1 = {...deck[card1Index]};
+      const card2 = {...deck[card2Index]}
+      card1.isFlipped = false;
+      card2.isFlipped = false;
+      const newDeck = deck.map((card, index) => {
+        if (card1Index === index) {
+          return card1;
+        }
+        if (card2Index === index) {
+          return card2;
+        }
+        return card;
       });
-
-      newDeck[card1Index].isFlipped = false;
-      newDeck[card2Index].isFlipped = false;
-
       this.setState({
         deck: newDeck
       });
-
     };
     
   render() {
